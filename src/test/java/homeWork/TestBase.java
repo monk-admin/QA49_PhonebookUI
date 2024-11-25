@@ -38,4 +38,28 @@ public class TestBase {
         driver.findElement(locator).clear();
         driver.findElement(locator).sendKeys(text);
     }
+
+    public boolean isHomePageComponentPresent(){
+        return driver.findElements(By.xpath("//div/a/img[@alt='Tricentis Demo Web Shop']")).size()>0;
+    }
+
+    public boolean ifExistedUser(){
+        return driver.findElements(By.xpath("//li[contains(.,'The specified email already exists')]")).size()>0;
+    }
+
+    public void clickOnRegistrationButton() {
+        click(By.name("register-button"));
+    }
+
+    public void fillRegisterLoginForm(String email, String password) {
+        type(By.name("FirstName"), "Tom");
+        type(By.name("LastName"), "Hanks");
+        type(By.name("Email"), email);
+        type(By.name("Password"), password);
+        type(By.name("ConfirmPassword"), password);
+    }
+
+    public void clickOnRegisterLink() {
+        click(By.cssSelector("[href='/register']"));
+    }
 }

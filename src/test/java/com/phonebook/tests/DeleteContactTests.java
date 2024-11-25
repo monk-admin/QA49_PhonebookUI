@@ -3,13 +3,11 @@ package com.phonebook.tests;
 import com.phonebook.models.Contact;
 import com.phonebook.models.User;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class AddContactTests extends TestBase{
+public class DeleteContactTests extends TestBase{
 
-    //login
     @BeforeMethod
     public void precondition(){
         if (!app.getUser().isLoginLinkPresent()){
@@ -18,10 +16,7 @@ public class AddContactTests extends TestBase{
         app.getUser().clickOnLoginLink();
         app.getUser().fillRegisterLoginForm(new User().setEmail("ukr@hello.com").setPassword("HeLlo1$!"));
         app.getUser().clickOnLoginButton();
-    }
 
-    @Test
-    public void addContactPositiveTest(){
         app.getContact().clickOnAddLink();
         app.getContact().fillContactForm(new Contact()
                 .setName("Karl")
@@ -31,12 +26,17 @@ public class AddContactTests extends TestBase{
                 .setAddress("Berlin")
                 .setDescription("goalkeeper"));
         app.getContact().clickOnSaveButton();
-        Assert.assertTrue(app.getContact().isContactAdded("Karl"));
     }
 
-    @AfterMethod
-    public void postCondition(){
+    @Test
+    public void deleteContactTest(){
+        int sizeBefore = app.getContact().sizeOfContacts();
         app.getContact().deleteContact();
+        app.getContact().pause(1000);
+        int sizeAfter = app.getContact().sizeOfContacts();
+
+        Assert.assertEquals(sizeAfter, sizeBefore - 1);
+
     }
 
 }

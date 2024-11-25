@@ -1,22 +1,33 @@
 package com.phonebook.tests;
 
-import org.openqa.selenium.By;
+import com.phonebook.models.User;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LoginTests extends TestBase{
 
-    @Test
-    public void loginPositiveTest(){
-        //click on Login link
-        click(By.cssSelector("[href='/login']"));
-        //enter email to email field
-        type(By.name("email"), "ukr@hello.com");
-        //enter password to password field
-        type(By.name("password"), "HeLlo1$!");
-        //click on Login button
-        click(By.name("login"));
-        //verify Sign out button is displayed
-        Assert.assertTrue(isElementPresent(By.xpath("//button[.='Sign Out']")));
+    @BeforeMethod
+    public void ensurePrecondition(){
+        if (!app.getUser().isLoginLinkPresent()){
+            app.getUser().clickOnSignOutButton();
+        }
     }
+
+    @Test(priority = 1)
+    public void loginPositiveTest(){
+        app.getUser().clickOnLoginLink();
+        app.getUser().fillRegisterLoginForm(new User().setEmail("ukr@hello.com").setPassword("HeLlo1$!"));
+        app.getUser().clickOnLoginButton();
+        Assert.assertTrue(app.getUser().isSignOutButtonPresent());
+    }
+
+    @Test(priority = 2)
+    public void loginNegativeWithOutEmailTest(){
+        app.getUser().clickOnLoginLink();
+        app.getUser().fillRegisterLoginForm(new User().setPassword("HeLlo1$!"));
+        app.getUser().clickOnLoginButton();
+        Assert.assertTrue(app.getUser().isAlertDisplayed());
+    }
+
 }
