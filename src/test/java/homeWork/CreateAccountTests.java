@@ -22,5 +22,5 @@ public class CreateAccountTests extends TestBase{
         clickOnRegistrationButton();
         Assert.assertTrue(isElementPresent(By.xpath("//li[contains(.,'The specified email already exists')]")));
     }
-    
+
 }
